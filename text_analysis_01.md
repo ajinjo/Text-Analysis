@@ -55,8 +55,6 @@
 
 
 
-
-
 ## 텍스트 사전 준비 작업 '텍스트 전처리' - 텍스트 정규화
 
 텍스트 자체를 바로 피처로 만들 수는 없다. 따라서 사전에 텍스트를 가공하는 준비 작업이 필요하다. 텍스트 정규화는 텍스트를 머신러닝 알고리즘이나 NLP 애플리케이션에 입력 데이터로 사용하기 위해 ※클렌징/정제/토큰화/어근화※ 등 다양한 텍스트 데이터의 사전 작업을 수행하는 것을 의미한다. 
@@ -93,9 +91,63 @@
 
    - 문장에서 단어를 분리하는 단어 토큰화
 
+     - 공백, 콤마(,), 마침표(.), 개행문자 등으로 단어를 분리함
+
+     - 정규 표현식을 이용해 다양한 유형으로 토큰화를 수행 할 수 있음
+
+     - word_tokenize()를 이용해 단어 토큰화를 수행함
+
+     - ```python
+       from nltk import word_tokenize
+       
+       sentence = "The Matrix is everywhere its all around us, here even in this room."
+       words = word_tokenize(sentence)
+       print(type(words), len(words))
+       print(words)
+       
+       # <class 'list'> 15 
+       ```
+
 3) 필터링/스톱 워드 제거/철자 수정
 
-   - 
+   - 스톱 워드(Stop word) : 분석에 큰 의미가 없는 단어
+
+   - is, the, a, will 등 문장을 구성하는 필수 문법 요소지만 문맥적으로 큰 의미가 없는 단어 
+
+   - ```python
+     import nltk
+     nltk.download('stopwords')
+     
+     print('영어 stop words 개수:', len(nltk.corpus.stopwords.words('english')))
+     print(nltk.corpus.stopwords.words('english')[:20])
+     ```
+
+     - 문장별로 단어를 토큰화해 생성된 리스트에 대해서 stopwords를 필터링으로 제거해 분석을 위한 의미 있는 단어만 추출
+
+     - ```python
+       import nltk
+       
+       stopwords = nltk.corpus.stopwords.words('english')
+       all_tokens = []
+       
+       # 위 예제에서 3개의 문장별로 얻은 word_tokens list에 대해 스톱 워드를 제거하는 반복문 
+       for sentence in word_tokens:
+           filtered_words = []
+           # 개별 문장별로 토큰화된 문장 list에 대해 스톱 워드를 제거하는 반복문
+           for word in sentence:
+               # 소문자로 모두 변환합니다.
+               word = word.lower()
+               # 토큰화된 개별 단어가 스톱 워드의 단어에 포함되지 않으면 word_tokens에 추가
+               if word not in stopwords:
+                 filtered_words.append(word)
+           all_tokens.append(filtered_words)
+       print(all_tokens)
+       
+       # [['matrix','everywhere','around','us',',',even',,'room','.''],['see','window','television','.'],'feel','go','work',',','go','church','pay','taxes','.']
+       # is, this와 같은 스톱 워드가 필터링을 통해 제거됨
+       ```
+
+       
 
 4) Stemming
 
