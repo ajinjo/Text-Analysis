@@ -1,0 +1,360 @@
+텍스트 분석
+토큰화(텍스트를 일정한 단위[문장 단위, 단어 단위, 형태소 단위,...]로 구분짓는 일)
+- 문장 단위 토큰화(sentence tokenization)
+- 단어 단위 토큰화(word tokenization)
+- 형태소 단위 토큰화(POS tokenization)
+품사 태깅(문법 범주 할당-감성사전 및 토픽사전 단어 추가 등 사전관리)
+표제어 추출(감성사전 및 토픽사전 단어 추가 등 사전관리)
+형태소 분석(자립/의존형태소 분리)
+불용어 제거(가치 없는 토큰 and,the,a 등 제거)
+
+
+
+
+# KoNLPY
+한국어 형태소 분석 패키지
+자바 기반 파이썬 라이브러리
+
+# 패키지 설치
+!python -m pip install --upgrade konlpy
+!python -m pip install --upgrade konlpy
+!python -m pip install --upgrade konlpy
+
+
+from konlpy.tag import Kkma
+from konlpy.utils import pprint
+kkma = Kkma()
+pprint(kkma.sentences(u'네, 안녕하세요. 반갑습니다.'))
+
+결과값
+[네, 안녕하세요..,
+반갑습니다.]
+
+pprint(kkma.nouns(u'질문이나 건의사항은 깃헙 이슈 트래커에 남겨주세요.'))
+[질문,
+건의,
+건의사항,
+사항,
+깃헙,
+이슈,
+트래커]
+
+pprint(kkma.pos(u'오류보고는 실행환경, 에러메세지와함게 설명을 최대한상세히!^^'))
+[(오류, NNG),
+(보고, NNG),
+(는, JX),
+(실행, NNG),
+(환경, NNG),
+(,, SP),
+(에러, NNG),
+(메세지, NNG),
+(와, JKM),
+(함께, MAG),
+(설명, NNG),
+(을, JKO),
+(최대한, NNG),
+(상세히, MAG),
+(!, SF),
+(^^, EMO)]
+
+
+
+
+[소스코드]
+
+from konlpy.tag import Kkma
+kkma=Kkma() #꼬꼬마(Kkma) 형태소 분석기
+
+text='새벽 4시에 전화를 걸 수 있는 친구라면 중요한 친구이다. 불행은 누가 진정한 친구가 아닌지를 보여준다.'
+
+
+
+kkma.sentences(text)
+#sentence 단위 토큰화
+
+
+
+from konlpy.tag import Kkma
+kkma=Kkma()
+
+text='새벽 4시에 전화를 걸 수 있는 친구라면 중요한 친구이다. 불행은 누가 진정한 친구가 아닌지를 보여준다.'
+
+
+kkma.sentences(text)
+#sentence 단위 토큰화
+['새벽 4시에 전화를 걸 수 있는 친구라면 중요한 친구이다.', '불행은 누가 진정한 친구가 아닌지를 보여준다.']
+
+text.split('.')
+['새벽 4시에 전화를 걸 수 있는 친구라면 중요한 친구이다','불행은 누가 진정한 친구가 아닌지를 보여준다','']
+
+kkma.morphs(text)
+['새벽','4','시','에','전화','를','걸','ㄹ','수','있','는','친구','이','라면','중요','하','ㄴ','친구','이','다','.','불행','은','누','가','진정','하','ㄴ','친구','가','아니','ㄴ지','를','보여주','ㄴ다','.']
+
+text.split()
+['새벽','4시에','전화를','걸','수','있는','친구라면','중요한','친구이다.','불행은','누가','진정한','친구가','아닌지를','보여준다.']
+
+
+#nltk의 word_tokenize()를 사용한 것과 비교분석해보기
+import nltk
+nltk.download('punkt')
+
+nltk.word_tokenize(text)
+
+['새벽','4시에','전화를','걸','수','있는','친구라면','중요한','친구이다','.','불행은','누가','진정한','친구가','아닌지를','보여준다','.']
+
+
+
+
+형태소 분석이란?
+형태소를 분석하여 어근, 접두사/접미사 등 문장의 다양한 언어적 속성의 구조를 분석하는 것을 말한다
+
+형태소 태깅? 
+part-of-speech tagging, POS tagging, or simply tagging
+문장에서 각 형태소 역할(명사, 동사, 형용사 등 품사)을 식별하여 분류하고 그에 따라 태그를 붙이는 과정을 말한다
+즉 품사(part-of-speech, POS)를 사용해 주어진 문장의 단어를 분리하는 프로세스다 
+
+품사(part-of-speech, POS)
+문장에서의 형태소의 역할(명사, 동사, 형용사 등)을 나타낸다.
+
+
+
+#명사만 추출해보기
+kkma.nouns(text)
+
+['새벽','4','4시','시','전화','수','친구','중요','불행','누','진정']
+
+#pos()를 사용하면 어떤 형태로 반환될지 알아보자.
+kkma.pos(text, join=True)
+
+['새벽/NNG',
+'4/NR',
+'시/NNM',
+'에/JKM',
+'전화/NNG',
+'를/JKO',
+'걸/VV',
+'ㄹ/ETD',
+'수/NNB',
+'있/VV','
+'는/ETD',
+'친구/NNG',
+'이/VCP',
+'라면/ECD',
+'중요/NNG',
+'하/XSV',
+'ㄴ/ETD',
+'친구/NNG',
+'이/VCP',
+'다/EFN',
+'./SF',
+'불행/NNG',
+'은/JX',
+'누/NNG',
+'가/JKS',
+'진정/NNG',
+'하/XSV',
+'ㄴ/ETD',
+'친구/NNG',
+'가/JKC',
+'아니/VCN',
+'ㄴ지/ECD',
+'를/JX',
+'보여주/VV',
+'ㄴ다/EFN',
+'./SF']
+
+KoNLPy에는 서로 다른 형태소 분석기 5개를 제공하고 있다.
+Hannanum, Komoran, Kkma, Mecab, Okt
+이 중 Mecab은 설치를 따로 해야 하고 윈도우 운영체제를 지원하지 않는다.
+따라서 여기서는 4가지의 형태소 분석기를 사용한다.
+
+
+
+import konlpy
+
+#한나눔
+hannanum=konlpy.tag.Hannanum()
+hannanum.pos(text)
+
+[('새벽','N'),
+('4시','N'),
+('에','J'),
+('전화','N'),
+('를','J'),
+('거','N'),
+('ㄹ','J'),
+('수','N'),
+('있','P'),
+('는','E'),
+('친구','N'),
+('이','J'),
+('라면','E'),
+('중요','N'),
+('하','X'),
+('ㄴ','E'),
+('친구,'N'),
+('이','J'),
+('다','E'),
+('.','S'),
+('불행',N'),
+('은','J'),
+('누구','N'),
+('불행','J'),
+('은','N'),
+('누구','N'),
+('가','J'),
+('진정한','N'),
+('친구','N'),
+('가','J'),
+('아니','P'),
+('ㄴ',E'),
+('지','N'),
+('를','J'),
+('보이','P'),
+('어','E'),
+('주','P'),
+('ㄴ다','E'),
+('.','S')]
+
+#한나눔
+hannanum=konlpy.tag.Hannanum()
+hannanum.pos(text)
+
+[('새벽','N'),
+('4시','N'),
+('에','J'),
+('전화','N'),
+('를','J'),
+('거','N'),
+('ㄹ','J'),
+('수','N'),
+('있','P'),
+('는','E'),
+('친구','N'),
+('이','J'),
+('라면','E'),
+('중요','N'),
+('하','X'),
+('ㄴ','E'),
+('친구,'N'),
+('이','J'),
+('다','E'),
+('.','S'),
+('불행',N'),
+('은','J'),
+('누구','N'),
+('불행','J'),
+('은','N'),
+('누구','N'),
+('가','J'),
+('진정한','N'),
+('친구','N'),
+('가','J'),
+('아니','P'),
+('ㄴ',E'),
+('지','N'),
+('를','J'),
+('보이','P'),
+('어','E'),
+('주','P'),
+('ㄴ다','E'),
+('.','S')]
+
+
+
+
+
+
+import konlpy
+
+#KoNLPy에서 제공하는 서로 다른 형태소 분석기 5개
+: Hannanum, Komoran, Kkma, Mecab, Okt
+
+#한나눔
+hannanum=konlpy.tag.Hannanum()
+hannanum.pos(text)
+
+#코모란
+komoran=konlpy.tag.Komoran()
+komoran.pos(text)
+
+#꼬꼬마
+kkma=konlpy.tag.Kkma()
+kkma.pos(text)
+
+#Open Korean Text(Okt)
+okt=konlpy.tag.Okt()
+okt.pos(text)
+
+
+
+
+
+
+
+
+
+konlpy.tag.Hannanum().pos(text) #튜플 반환, (형태소, 품사)형태의 리스트로 반환
+konlpy.tag.Hannanum().pos(text, join=True) #형태소와 품사를 /로 붙인 문자열의 리스트 반환
+konlpy.tag.Hannanum().pos(text, flatten=False, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열 리스트로 반환 #flatten=False 어절 단위로 보존함. 즉 어절 단위로 나눔.
+konlpy.tag.Hannanum().morphs(text) #모든 형태소를 리스트로 반환
+
+konlpy.tag.Komoran().pos(text)
+konlpy.tag.Komoran().pos(text, join=True)
+konlpy.tag.Komoran().pos(text, flatten=False, join=True)
+konlpy.tag.Komoran().nouns(text)
+
+konlpy.tag.Kkma().pos(text) #품사(POS) 태깅을 한 튜플(형태소, 품사)을 리스트로 반환
+konlpy.tag.Kkma().pos(text, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열 리스트로 반환
+konlpy.tag.Kkma().pos(text, flatten=False, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열 리스트로 반환, flatten=False 어절 단위를 보존, 어절 단위로 나눠줌.
+konlpy.tag.Kkma().morphs(text) #형태소별로 추출 #모든 형태소를 리스트로 반환
+konlpy.tag.Kkma().nouns(text) #명사 추출
+konlpy.tag.Kkma().sentences(text) #문장을 분석함. 마침표가 없어도 문장을 구분함.
+
+konlpy.tag.Okt().pos(text) #품사(POS) 태깅을 한 튜플(형태소, 품사)를 리스트로 반환
+konlpy.tag.Okt().pos(text, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열의 리스트로 반환
+konlpy.tag.Okt().pos(text, norm=True, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열의 리스트로 반환, 토큰 정규화
+konlpy.tag.Okt().pos(text, stem=True, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열의 리스트로 반환, 토큰을 어간 단위로 구분
+konlpy.tag.Okt().pos(text, norm=True, stem=True, join=True) #품사(POS) 태깅할 때 형태소와 품사를 /로 붙인 문자열 리스트로 반환, 토큰을 정규화하고 어간 단위로 구분함
+konlpy.tag.Okt().nouns(text) #명사를 추출
+konlpy.tag.Okt().normalize(text) #텍스트 정규화
+konlpy.tag.Okt().morphs(text) #형태소별 추출, 모든 형태소를 리스트로 반환
+konlpy.tag.Okt().morphs(text, norm=True) #형태소별 추출, 모든 형태소를 리스트로 반환, 토큰 정규화
+konlpy.tag.Okt().morphs(text, stem=True) #형태소별 추출, 모든 형태소를 리스트로 반환, 토큰을 어간 단위로 구분
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
