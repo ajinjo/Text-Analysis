@@ -33,7 +33,7 @@
      !python -m pip install --upgrade konlpy
      ```
 
-  2. ddd
+  2. 
 
   3. ddd
 
@@ -42,3 +42,58 @@
   5. ddd
 
   6. ddd
+
+4
+
+- 형태소 분석이란?
+  - 형태소를 분석하여 어근, 접두사/접미사 등 문장의 다양한 언어적 속성의 구조를 분석하는 것
+
+- 형태소 태깅?
+  - part-of-speech tagging, POS tagging, or simply tagging
+  - 문장에서 각 형태소 역할(명사, 동사, 형용사 등 품사)을 식별하여 분류하고 그에 따라 태그를 붙이는 과정을 말한다.
+  - 즉, 품사(part-of-speech, POS)를 사용해 주어진 문장의 단어를 분리하는 프로세스다.
+- 품사(part-of-speech, POS)
+  - 문장에서의 형태소의 역할(명사, 동사, 형용사 등)을 나타낸다.
+
+
+
+#### KoNLPy에서 제공하는 형태소 분석기 5개
+
+- Hannanum, Komoran, Kkma, Mecab, Okt
+
+- 한나눔
+
+  - ```python
+    hannanum = konlpy.Hannanum()
+    hannanum.pos(text)
+    ```
+
+- 코모란
+
+  - ```python
+    komoran = konlpy.tag.Komoran()
+    komoran.pos(text)
+    ```
+
+- 꼬꼬마
+
+  - ```python
+    kkma = konlpy.tag.Kkma()
+    kkma.pos(text)
+    ```
+
+- Open Korean Text(Okt)
+
+  - ```python
+    okt = konlpy.tag.Okt()
+    okt.pos(text)
+    ```
+
+
+
+s
+
+
+
+
+
